@@ -54,15 +54,7 @@ class ChainWalkEnv(object):
     def printHistory(self):
         print self.history
         
-    #def Reset(self)
 
-"""
-class FeaturePolicy(object):
-    def __init__(beta):
-        self.beta = beta
-        self.
-"""
-    
 
 def RBF(x,m,v):
     return np.exp(-np.square((x-m)/v))
