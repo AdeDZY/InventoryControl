@@ -37,7 +37,7 @@ def main():
         print v
         state_value[state] = v
 
-    pickle.dump(state_value, open('fillall_value.pkl','wb'))
+    pickle.dump(state_value, open('fillall_value.pkl', 'wb'))
 
 if __name__ == "__main__":
     main()

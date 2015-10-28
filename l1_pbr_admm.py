@@ -11,7 +11,7 @@ def main():
     eig, eigv = np.linalg.eig(C.T.dot(C))
     eig_max = eig.max()
 
-    iternum = 5000
+    iternum = 20000
     mu = 10
     tau = 0.9 / eig_max
     epsilon = 0.1
@@ -19,6 +19,9 @@ def main():
     datanum, featnum = feat_mat1.shape
     beta = np.random.normal(size=featnum)
     v = np.random.normal(size=datanum)
+    beta_best = None
+    min_obj = 99999999
+
     # inexact admm
     for idx in range(iternum):
         c = d + C.dot(beta) - v * mu
@@ -29,10 +32,14 @@ def main():
         v = v - (C.dot(beta) + d - alpha) / mu
 
         obj = np.linalg.norm(np.dot(C, beta) + d)
+        if obj < min_obj:
+            min_obj = obj
+            beta_best = beta
+
         if idx % 100 == 0:
             print obj
 
-    pickle.dump(beta, open('beta_admm.pkl', 'wb'))
+    pickle.dump(beta_best, open('beta_admm.pkl', 'wb'))
 
 
 if __name__ == '__main__':
