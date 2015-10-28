@@ -1,9 +1,8 @@
-# ChainWalk
+# Inventory Control
 ## Environment
-- ChainWalkEnv.py: simulator of chain walk, for data collection
-- feature_vi.py: feature for value function iteration
-- feature_pi.py: feature for policy iteration
-- randomPolicyValue.py: value function for random policy
+- InventoryControlEnv.py: simulator of inventory control, for data collection
+- feature_vi.py: feature for value function iteration. 1 state + 10 rbf + 1000 noisy features
+- feature_pi.py: feature for policy iteration. Todo
 
 ## Methods
 - lstd: least square temporal difference learning (baseline)
