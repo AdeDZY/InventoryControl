@@ -1,22 +1,24 @@
-import sys
 import numpy as np
-from feature_vi import SelectedFeat
+from feature_vi import selected_feat
 import cPickle as pickle
 
-trueValue = pickle.load(open('random_value.pkl','r'))
-estimatedValue = np.zeros_like(trueValue)
+true_value = pickle.load(open('fillall_value.pkl', 'r'))
+estimated_value = {}
 
-beta = pickle.load(open('beta.pkl','r'))
-iternum = 2000
-for state in range(20):
+beta = pickle.load(open('beta.pkl', 'r'))
+iternum = 1
+for state in true_value:
     value = 0.0
     for iter in range(iternum):
-        #feat = featureFunc1(state)
-        feat = SelectedFeat(state)
-        value+=np.dot(beta,feat.T)
-    value/=iternum
-    estimatedValue[state] = value
+        feat = selected_feat(state)
+        value += np.dot(beta, feat.T)
+    value /= iternum
+    print value, true_value[state]
+    estimated_value[state] = value
 
-mse = ((trueValue-estimatedValue)**2).mean()
-print estimatedValue
+mse = 0
+for state in true_value:
+    mse += (true_value[state] - estimated_value[state]) ** 2
+mse /= len(true_value)
+print estimated_value
 print mse

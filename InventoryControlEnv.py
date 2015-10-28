@@ -20,6 +20,10 @@ class InventoryControlEnv(object):
         self.current_state = random.uniform(0, self.max_size)
         self.history = []
 
+    def set_initial_state(self, init_state):
+        self.current_state = init_state
+        self.history = []
+
     def take_action(self, action):
         prev_state = self.current_state
         customer_demand = random.uniform(0, 24)
@@ -34,11 +38,11 @@ class InventoryControlEnv(object):
         reward = 0
         if prev_state + action >= customer_demand:
             reward += customer_demand * self.sell_price
-            reward -= action * self.buy_price - self.order_overhead
-            reward += 0.2 * math.pow(self.current_state, 1.4)  # unsold units storage fee
+            reward -= action * self.buy_price + self.order_overhead
+            reward -= 0.2 * math.pow(self.current_state, 1.4)  # unsold units storage fee
         else:
             reward += (action + prev_state) * self.sell_price  # sell all
-            reward -= action * self.buy_price - self.order_overhead
+            reward -= action * self.buy_price + self.order_overhead
             reward -= (customer_demand - prev_state - action) * self.custom_punish  # unsatisfied demand punishment
             # no unsold units
 
@@ -58,17 +62,16 @@ def main():
     history = []
 
     # generate history under fill-all policy
-    nsample = 100  # experiments compares nsample = 100 and 500
+    nsample = 1000  # experiments compares nsample = 100 and 500
     for idx in range(nsample):
         ice.reset()
         for jdx in range(10):  # each episode has 10 steps
             # print cwe.EstimateState()
-            action = 20 - ice.current_state
+            action = ice.max_size - ice.current_state
             reward = ice.take_action(action)
 
         ice.print_history()
         history.append(ice.history)
-        # print len(history)
     pickle.dump(history, open('history.pkl', 'wb'))
 
 if __name__ == '__main__':
