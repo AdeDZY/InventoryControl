@@ -3,7 +3,7 @@
 - InventoryControlEnv.py: simulator of inventory control, for data collection
 - feature_vi.py: feature for value function iteration. 
   - 1 state
-  - 20 rbf (m = 0,2, .. 40) 
+  - 20 rbf (m = 0,1, .. 20) 
   - 1000 noisy features
 - feature_pi.py: feature for policy iteration. Todo
 
