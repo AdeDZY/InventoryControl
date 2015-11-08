@@ -18,6 +18,7 @@ def l1_proximal_map(X, t):
             X_map[idx] += t
         else:
             X_map[idx] = 0
+            #print "lala"
     return X_map
 
 

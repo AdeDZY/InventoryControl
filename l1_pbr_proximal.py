@@ -22,7 +22,7 @@ def main():
     P = space_projection_mat(feat_mat1)
     gamma = 0.9
     ld = 1
-    lr = 0.0000001
+    lr = 0.000001
     d = np.dot(P, rewards)
     C = np.dot(P, feat_mat2) * gamma - feat_mat1
     datanum, featnum = feat_mat1.shape
@@ -35,6 +35,7 @@ def main():
         obj = np.linalg.norm(np.dot(C, beta) + d) + ld * np.linalg.norm(beta, 1)
         if idx % 100 == 0:
             print obj
+            print np.count_nonzero(beta)
 
     print beta
     print obj

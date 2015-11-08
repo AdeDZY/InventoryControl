@@ -7,17 +7,18 @@ def rbf(x, m, v):
 
 
 def rele_feature_func(state):
-    rel_feat = np.zeros((1, 21))
-    rel_feat[0, 0] = state
+    rel_feat = np.zeros((1, 22))
+    rel_feat[0, 0] = 1
+    rel_feat[0, 1] = state
     for fidx in range(0, 20):
-        rel_feat[0, fidx + 1] = rbf(state, fidx * 1, 1)
+        rel_feat[0, fidx + 2] = rbf(state, fidx * 1, 1)
 
     return rel_feat
 
 
 def feature_func1(state):
     noise_feat_num = 1000
-    irre_feat = np.random.normal(scale=20, size=(1, noise_feat_num))
+    irre_feat = np.random.normal(size=(1, noise_feat_num))
     rel_feat = rele_feature_func(state)
     feat = np.concatenate((rel_feat, irre_feat), axis=1)
 

@@ -11,9 +11,10 @@ def main():
     eig, eigv = np.linalg.eig(C.T.dot(C))
     eig_max = eig.max()
 
-    iternum = 20000
-    mu = 10
-    tau = 0.9 / eig_max
+    iternum = 50000
+    mu = 5000000
+    tau = 1 / eig_max
+    print tau
     epsilon = 0.1
 
     datanum, featnum = feat_mat1.shape
@@ -28,7 +29,8 @@ def main():
         alpha = l2_ball_projection(c, epsilon)
         beta_grad = C.T.dot(C.dot(beta) + d - alpha - v * mu)
         beta_grad_update = beta - beta_grad * tau
-        beta = l1_proximal_map(beta_grad_update, tau * mu)
+        beta[0] = beta_grad_update[0]
+        beta[1:] = l1_proximal_map(beta_grad_update[1:], tau * mu)
         v = v - (C.dot(beta) + d - alpha) / mu
 
         obj = np.linalg.norm(np.dot(C, beta) + d)
@@ -38,6 +40,8 @@ def main():
 
         if idx % 100 == 0:
             print obj
+            print np.count_nonzero(beta)
+            print beta[0:10]
 
     pickle.dump(beta_best, open('beta_admm.pkl', 'wb'))
 

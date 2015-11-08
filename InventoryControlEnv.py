@@ -62,10 +62,10 @@ def main():
     history = []
 
     # generate history under fill-all policy
-    nsample = 1000  # experiments compares nsample = 100 and 500
+    nsample = 100  # experiments compares nsample = 100 and 500
     for idx in range(nsample):
         ice.reset()
-        for jdx in range(10):  # each episode has 10 steps
+        for jdx in range(20):  # each episode has 10 steps
             # print cwe.EstimateState()
             action = ice.max_size - ice.current_state
             reward = ice.take_action(action)
