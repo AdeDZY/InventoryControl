@@ -1,5 +1,6 @@
 import cPickle as pickle
 from util_conv import *
+import argparse
 
 
 class LSTD(object):
@@ -34,12 +35,16 @@ class LSTD(object):
 
 
 def main():
-    [feat_mat1, rewards, feat_mat2] = pickle.load(open('features.pkl'))
+    parser = argparse.ArgumentParser()
+    parser.add_argument("runid", help="run id, such as 1, 2..")
+    args = parser.parse_args()
+
+    [feat_mat1, rewards, feat_mat2] = pickle.load(open('features{0}.pkl'.format(args.runid)))
     lstd = LSTD(feat_mat1, rewards, feat_mat2)
     beta = lstd.lstd()
     print lstd.pbr()
     print beta
-    pickle.dump(beta, open('beta.pkl', 'wb'))
+    pickle.dump(beta, open('beta{0}.pkl'.format(args.runid), 'wb'))
 
 if __name__ == '__main__':
     main()

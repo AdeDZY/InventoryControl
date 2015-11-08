@@ -2,6 +2,7 @@ import numpy as np
 import random
 import math
 import cPickle as pickle
+import argparse
 
 
 class InventoryControlEnv(object):
@@ -57,22 +58,25 @@ def rbf(x, m, v):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("runid", help="run id, such as 1, 2..")
+    parser.add_argument("nsample", type=int, help="# of outer iterations")
+    args = parser.parse_args()
+
     ice = InventoryControlEnv()
     random.seed()
     history = []
 
     # generate history under fill-all policy
-    nsample = 100  # experiments compares nsample = 100 and 500
+    nsample = args.nsample  # experiments compares nsample = 100 and 500
     for idx in range(nsample):
         ice.reset()
         for jdx in range(20):  # each episode has 10 steps
-            # print cwe.EstimateState()
             action = ice.max_size - ice.current_state
             reward = ice.take_action(action)
-
-        ice.print_history()
+        # ice.print_history()
         history.append(ice.history)
-    pickle.dump(history, open('history.pkl', 'wb'))
+    pickle.dump(history, open('history{0}.pkl'.format(args.runid), 'wb'))
 
 if __name__ == '__main__':
     main()

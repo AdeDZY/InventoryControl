@@ -1,5 +1,6 @@
 import numpy as np
 import cPickle as pickle
+import argparse
 
 
 def rbf(x, m, v):
@@ -29,8 +30,13 @@ def selected_feat(state):
     return feature_func1(state)
 
 
+
 def main():
-    history = pickle.load(open('history.pkl'))
+    parser = argparse.ArgumentParser()
+    parser.add_argument("runid", help="run id, such as 1, 2..")
+    args = parser.parse_args()
+
+    history = pickle.load(open('history{0}.pkl'.format(args.runid)))
 
     feat_total = None
     feat_total2 = None
@@ -63,7 +69,7 @@ def main():
         else:
             reward_total = np.concatenate((reward_total, rewards), axis=0)
 
-    pickle.dump([feat_total, reward_total, feat_total2], open('features.pkl', 'wb'))
+    pickle.dump([feat_total, reward_total, feat_total2], open('features{0}.pkl'.format(args.runid), 'wb'))
 
 
 if __name__ == '__main__':

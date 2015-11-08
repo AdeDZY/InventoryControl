@@ -1,11 +1,16 @@
 import numpy as np
 import cPickle as pickle
 from util_conv import *
+import argparse
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("runid", help="run id, such as 1, 2..")
+    args = parser.parse_args()
+
     iternum = 50000
-    [feat_mat1, rewards, feat_mat2] = pickle.load(open('features.pkl'))
+    [feat_mat1, rewards, feat_mat2] = pickle.load(open('features{0}.pkl'.format(args.runid)))
     P = space_projection_mat(feat_mat1)
     gamma = 0.9
     ld = 500
@@ -19,7 +24,6 @@ def main():
     min_obj = 99999999
 
     for idx in range(iternum):
-        #ld *= 0.99999999
         beta_v = beta + (beta - beta_t_1) * (idx - 2) / (idx + 1)
         beta_t_1 = beta
         beta_grad = np.dot(C.T, np.dot(C, beta) + d)
@@ -32,15 +36,13 @@ def main():
             beta_best = beta
 
         if idx % 100 == 0:
-            print obj
-            print beta[0]
-            print np.count_nonzero(beta)
+            print str(idx) + '\t' + str(obj) + '\t' + str(np.count_nonzero(beta))
 
     # print beta
     print min_obj
     print beta_best
     print np.count_nonzero(beta_best)
-    pickle.dump(beta_best, open('beta_acc_prox.pkl', 'wb'))
+    pickle.dump(beta_best, open('beta_acc_prox{0}.pkl'.format(args.runid), 'wb'))
 
 
 if __name__ == '__main__':

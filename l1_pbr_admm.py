@@ -1,9 +1,14 @@
 import cPickle as pickle
 from util_conv import *
+import argparse
 
 
 def main():
-    [feat_mat1, rewards, feat_mat2] = pickle.load(open('features.pkl'))
+    parser = argparse.ArgumentParser()
+    parser.add_argument("runid", help="run id, such as 1, 2..")
+    args = parser.parse_args()
+
+    [feat_mat1, rewards, feat_mat2] = pickle.load(open('features{0}.pkl'.format(args.runid)))
     P = space_projection_mat(feat_mat1)
     gamma = 0.9
     d = np.dot(P, rewards)
@@ -14,7 +19,6 @@ def main():
     iternum = 50000
     mu = 5000000
     tau = 1 / eig_max
-    print tau
     epsilon = 0.1
 
     datanum, featnum = feat_mat1.shape
@@ -39,11 +43,9 @@ def main():
             beta_best = beta
 
         if idx % 100 == 0:
-            print obj
-            print np.count_nonzero(beta)
-            print beta[0:10]
+            print str(idx) + '\t' + str(obj) + '\t' + str(np.count_nonzero(beta))
 
-    pickle.dump(beta_best, open('beta_admm.pkl', 'wb'))
+    pickle.dump(beta_best, open('beta_admm{0}.pkl'.format(args.runid), 'wb'))
 
 
 if __name__ == '__main__':
